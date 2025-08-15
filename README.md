@@ -37,3 +37,5 @@ pnpm prisma migrate dev --name init
 pnpm prisma generate
 5) **Run**
 pnpm dev
+
+<img width="1061" height="701" alt="C477CFD5-A069-41ED-8E1C-F8424AD83BDC" src="https://github.com/user-attachments/assets/3b70753c-1af0-43fd-8277-cc6bff30b41f" />
