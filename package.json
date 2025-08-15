@@ -1,12 +1,13 @@
 {
   "name": "jobtrackr",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
@@ -26,5 +27,7 @@
     "eslint-config-next": "15.4.6",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "engines": { "node": ">=18.18" }
+
 }
