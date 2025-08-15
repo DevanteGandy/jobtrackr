@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { unstable_noStore as noStore } from "next/cache";
-import { createApplication, deleteApplication } from "./actions/applications";
 import StatusSelect from "@/components/StatusSelect";
+import { createApplication, deleteApplication } from "./actions/applications";
+import Link from "next/link"; 
+import type { Status, Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -20,17 +22,18 @@ export default async function Home({
   const status = typeof params.status === "string" ? params.status : undefined;
   const q = typeof params.q === "string" ? params.q : undefined;
 
-  const where: any = {};
-  if (status && STATUSES.includes(status as any)) where.status = status;
-  if (q && q.trim()) where.OR = [{ company: { contains: q } }, { role: { contains: q } }];
+  const where: Prisma.ApplicationWhereInput = {};
+if (status && (STATUSES as readonly string[]).includes(status)) {
+  where.status = status as Status;
+}  if (q && q.trim()) where.OR = [{ company: { contains: q } }, { role: { contains: q } }];
 
   const apps = await prisma.application.findMany({ where, orderBy: { createdAt: "desc" } });
 
   const qs = new URLSearchParams();
   if (status) qs.set("status", status);
   if (q) qs.set("q", q);
-  const exportHref = `/api/export${qs.toString() ? `?${qs.toString()}` : ""}`;
-
+ const exportHref = `/api/export${qs.toString() ? `?${qs.toString()}` : ""}`;
+ 
   return (
     <main className="min-h-dvh bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-5xl p-6 lg:p-10 space-y-8">
@@ -88,8 +91,9 @@ export default async function Home({
                 <span className="text-xs text-slate-400">{apps.length} application{apps.length !== 1 ? "s" : ""} found</span>
                 <div className="flex gap-2">
                   {(status || q) && (
-                    <a href="/" className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm hover:bg-slate-800">Clear</a>
-                  )}
+                     <Link href="/" className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm hover:bg-slate-800">
+                        Clear
+                      </Link>                  )}
                   <button className="rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-medium hover:bg-blue-500">
                     Apply
                   </button>
